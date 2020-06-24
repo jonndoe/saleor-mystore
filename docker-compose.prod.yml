@@ -40,6 +40,9 @@ services:
       - 3000:80
     restart: unless-stopped
 
+
+
+
   dashboard:
     build:
       context: ./saleor-dashboard
@@ -47,6 +50,10 @@ services:
     ports:
       - 9000:80
     restart: unless-stopped
+    #labels:
+      #- "traefik.http.routers.dashboard.rule=host(`dashboard.docker.localhost`)"
+      #- "traefik.http.routers.dashboard.service=dashboard"
+      #- "traefik.http.services.dashboard.loadbalancer.server.port=9090"
 
 
 
@@ -107,6 +114,19 @@ services:
     restart: unless-stopped
     networks:
       - saleor-backend-tier
+
+  traefik:
+    image: "traefik:v2.0.1"
+    command:
+      - --entrypoints.web.address=:80
+      - --providers.docker
+      - --api.insecure
+    ports:
+      - "8080:8080" # Access through port 8080 e.g. localhost:8080 -> traefik dashboard
+      - "80:80" # Access through port 9000 e.g. localhost:9000 -> actual service (Dashboard)
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+
 
 volumes:
   saleor-db:
