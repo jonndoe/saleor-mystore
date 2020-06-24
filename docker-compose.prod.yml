@@ -122,8 +122,8 @@ services:
       - --providers.docker
       - --api.insecure
     ports:
-      - "8080:8080" # Access through port 8080 e.g. localhost:8080 -> traefik dashboard
-      - "80:80" # Access through port 9000 e.g. localhost:9000 -> actual service (Dashboard)
+      - "8080:8080"
+      - "80:80"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
 
