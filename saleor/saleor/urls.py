@@ -10,6 +10,7 @@ from .graphql.views import GraphQLView
 from .product.views import digital_product
 
 urlpatterns = [
+
     url(r"^graphql/", csrf_exempt(GraphQLView.as_view(schema=schema)), name="api"),
     url(r"^feeds/", include((feed_urls, "data_feeds"), namespace="data_feeds")),
     url(

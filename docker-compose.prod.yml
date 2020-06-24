@@ -1,17 +1,12 @@
-
-
-
-
-
 version: '2'
 
 services:
   api:
     ports:
-      - 8001:8001
+      - 8000:8000
     build:
       context: ./saleor
-      dockerfile: ./Dockerfile.dev
+      dockerfile: ./Dockerfile
       args:
         STATIC_URL: '/static/'
     restart: unless-stopped
@@ -30,8 +25,6 @@ services:
       - /app/templates/templated_email/compiled
       # shared volume between worker and api for media
       - saleor-media:/app/media
-      # static shared volume
-      - saleor-static:/app/static
     #command: python manage.py runserver 0.0.0.0:8000
     env_file: common.env
     environment:
@@ -42,26 +35,20 @@ services:
   storefront:
     build:
       context: ./saleor-storefront
-      dockerfile: ./Dockerfile.dev
+      dockerfile: ./Dockerfile.prod
     ports:
-      - 3000:3000
+      - 3000:80
     restart: unless-stopped
-    volumes:
-      - ./saleor-storefront/:/app:cached
-      - /app/node_modules/
-    command: npm start -- --host 0.0.0.0
 
   dashboard:
     build:
       context: ./saleor-dashboard
-      dockerfile: ./Dockerfile.dev
+      dockerfile: ./Dockerfile.prod
     ports:
-      - 9000:9000
+      - 9000:80
     restart: unless-stopped
-    volumes:
-      - ./saleor-dashboard/:/app:cached
-      - /app/node_modules/
-    command: npm start -- --host 0.0.0.0
+
+
 
   db:
     image: library/postgres:11.1-alpine
@@ -121,40 +108,12 @@ services:
     networks:
       - saleor-backend-tier
 
-  nginx:
-    volumes:
-      - saleor-media:/code/media
-      - saleor-static:/code/static
-    build:
-     context: .
-     dockerfile: dockerfiles/docker_nginx.conf
-    depends_on:
-     - api
-    labels:
-      #  Set your www.hostname.com as Host in production.
-      #- "traefik.http.routers.my-app.rule=Host(`whoami.docker.localhost`)"
-      - "traefik.http.routers.nginx.rule=Host(`127.0.0.1`, `localhost`, `0.0.0.0`)"
-
-  traefik:
-    image: "traefik:v2.0.1"
-    command:
-      - --entrypoints.web.address=:80
-      - --providers.docker
-      - --api.insecure
-    ports:
-      - "80:80"
-      - "8080:8080"
-    volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
-
-
 volumes:
   saleor-db:
     driver: local
   saleor-redis:
     driver: local
   saleor-media:
-  saleor-static:
 
 networks:
   saleor-backend-tier:
