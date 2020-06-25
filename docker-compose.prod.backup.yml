@@ -36,10 +36,8 @@ services:
     build:
       context: ./saleor-storefront
       dockerfile: ./Dockerfile.prod
-    labels:
-      - "traefik.enable=true"                                       # Explicitly tell Traefik to expose this container
-      - "traefik.http.routers.router1.rule=Host(`localhost`)" # The domain the service will respond to
-      - "traefik.http.routers.router1.entrypoints=web"              # Allow request only from the predefined entry point named "web"
+    ports:
+      - 3000:80
     restart: unless-stopped
 
 
@@ -49,12 +47,13 @@ services:
     build:
       context: ./saleor-dashboard
       dockerfile: ./Dockerfile.prod
-    labels:
-      - "traefik.enable=true"                                       # Explicitly tell Traefik to expose this container
-      - "traefik.http.routers.router2.rule=Host(`dashboard.localhost`)" # The domain the service will respond to
-      - "traefik.http.routers.router2.entrypoints=web"              # Allow request only from the predefined entry point named "web"
+    ports:
+      - 9000:80
     restart: unless-stopped
-
+    #labels:
+      #- "traefik.http.routers.dashboard.rule=host(`dashboard.docker.localhost`)"
+      #- "traefik.http.routers.dashboard.service=dashboard"
+      #- "traefik.http.services.dashboard.loadbalancer.server.port=9090"
 
 
 
