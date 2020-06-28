@@ -51,3 +51,26 @@ services:
       - "traefik.http.routers.router3.rule=Host(`whoami3.localhost`)"
       - "traefik.http.routers.router3.entrypoints=web"
 
+
+
+  # example if we want reffer to some service by path, i.e. : www.example.com/some_path_here
+  # but the path prefix will be stripped by middleware!!!!
+  # so service will not recieve path.
+  whoami4:
+    image: "containous/whoami"
+    container_name: "simple-service4"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.router4.entrypoints=web"
+      - "traefik.http.routers.router4.rule=Host(`localhost`) && PathPrefix(`/admin`)"
+      - "traefik.http.routers.router4.middlewares=router4-stripprefix"
+      - "traefik.http.middlewares.router4-stripprefix.stripprefix.prefixes=/admin"
+
+  # example if we want reffer to some service by path, i.e. : www.example.com/some_path_here
+  whoami5:
+    image: "containous/whoami"
+    container_name: "simple-service5"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.router5.entrypoints=web"
+      - "traefik.http.routers.router5.rule=Host(`localhost`) && PathPrefix(`/somepath`)"
