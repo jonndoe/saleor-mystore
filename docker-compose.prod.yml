@@ -25,7 +25,9 @@ services:
       - /app/templates/templated_email/compiled
       # shared volume between worker and api for media
       - saleor-media:/app/media
-    #command: python manage.py runserver 0.0.0.0:8000
+    #this command shoul not be here normally. This to be done manually or in Dockerfile.
+    #command: bash -c "python3 manage.py migrate && echo "yes" | python3 manage.py collectstatic && python3 manage.py populatedb --createsuperuser"
+
     env_file: common.env
     environment:
       - JAEGER_AGENT_HOST=jaeger
