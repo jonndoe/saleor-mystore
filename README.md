@@ -11,10 +11,11 @@
 
 - `git clone git@github.com:jonndoe/saleor-mystore.git`
 - `cd saleor-mystore`
-- `sudo docker-compose -f docker-compose.prod.yml up --build`
-- `sudo docker-compose -f docker-compose.prod.yml exec api python3 manage.py migrate`
-- `sudo docker-compose -f docker-compose.prod.yml exec api python3 manage.py collectstatic`
-- `sudo docker-compose -f docker-compose.prod.yml exec api python3 manage.py populatedb --createsuperuser`
+- `sudo docker-compose -f docker-compose.prod.yml build`
+- `sudo docker-compose -f docker-compose.prod.yml run --rm api python3 manage.py migrate`
+- `sudo docker-compose -f docker-compose.prod.yml run --rm api python3 manage.py collectstatic`
+- `sudo docker-compose -f docker-compose.prod.yml run --rm api python3 manage.py populatedb --createsuperuser`
+- `sudo docker-compose -f docker-compose.prod.yml up`
 
 
 
