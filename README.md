@@ -7,7 +7,14 @@
 - `sudo docker-compose -f docker-compose.dev.yml exec api python3 manage.py collectstatic`
 - `sudo docker-compose -f docker-compose.dev.yml exec api python3 manage.py populatedb --createsuperuser`
 
+# Run in production mode (work is in progress still, be carefull!!!) :
 
+- `git clone git@github.com:jonndoe/saleor-mystore.git`
+- `cd saleor-mystore`
+- `sudo docker-compose -f docker-compose.prod.yml up --build`
+- `sudo docker-compose -f docker-compose.prod.yml exec api python3 manage.py migrate`
+- `sudo docker-compose -f docker-compose.prod.yml exec api python3 manage.py collectstatic`
+- `sudo docker-compose -f docker-compose.prod.yml exec api python3 manage.py populatedb --createsuperuser`
 
 
 
